@@ -1,5 +1,8 @@
 package hsbc.hkth.api.service;
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+
 import hsbc.hkth.api.consuming.PostRequestSender;
 
 public class MobileAccountSummaryService {
@@ -8,7 +11,7 @@ public class MobileAccountSummaryService {
 	private String contentType = "application/x-www-form-urlencoded";
 	private String payload = "devtype=M&locale=en&platform=A&requestName=ac_summary&ver=1.1&json=&__cmd-All_MenuRefresh=__cmd-All_MenuRefresh&refresh=Y";
 
-	public String getAccountSummary() {
+	public JsonObject getAccountSummary() {
 
 		PostRequestSender requestSender = new PostRequestSender();
 		String response = null;
@@ -20,7 +23,9 @@ public class MobileAccountSummaryService {
 			return null;
 		}
 
-		return response;
+		JsonObject jsonObject = new JsonParser().parse(response).getAsJsonObject();
+		
+		return jsonObject;
 	}
 
 }
