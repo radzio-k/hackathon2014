@@ -10,7 +10,7 @@ public class PostRequestSenderTest {
 
 		// given
 		PostRequestSender sender = new PostRequestSender();
-		String url = "http://54.187.226.118:8281/CurrentHistory/1 ";
+		String url = "http://54.187.226.118:8281/CurrentHistory/1";
 
 		// when
 		String output = null;
