@@ -3,19 +3,19 @@ package hsbc.hkth.api.consuming;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class GetRequestSenderTest {
+public class PostRequestSenderTest {
 
 	@Test
 	public void requestHasResponse() {
 
 		// given
-		GetRequestSender sender = new GetRequestSender();
-		String url = "http://54.187.226.118:8281/CustomerSearch/1/GB";
+		PostRequestSender sender = new PostRequestSender();
+		String url = "http://54.187.226.118:8281/CurrentHistory/1 ";
 
 		// when
 		String output = null;
 		try {
-			output = sender.sendGet(url);
+			output = sender.sendPost(url);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
