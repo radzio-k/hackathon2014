@@ -63,8 +63,11 @@
 						[ _WidgetBase, _TemplatedMixin ],
 						{
 							templateString : "<div class='transactionRecord'>"
-									+ "<div>Name: <span data-dojo-attach-point='descNode'></span> <span data-dojo-attach-point='dateNode'></span></div>"
-									+ "<div>Phone #: <span data-dojo-attach-point='phoneNode'></span></div>"
+									+ "<div><span data-dojo-attach-point='descNode'></span> <span data-dojo-attach-point='dateNode'></span></div>"
+									+ "<div>Debit Currency: <span data-dojo-attach-point='debitCurrencyNode'></span></div>"
+									+ "<div>Payment: <span data-dojo-attach-point='paymentAmountNode'></span> <span data-dojo-attach-point='paymentCurrencyNode'></span></div>"
+									+ "<div>City : <span data-dojo-attach-point='cityNode'></span> Country : <span data-dojo-attach-point='countryNode'></span></div>"
+									+ "<div>Fee : <span data-dojo-attach-point='feeAmountNode'></span>  <span data-dojo-attach-point='feeCurrencyNode'></span></div>"
 									+ "</div>",
 
 									
@@ -135,6 +138,24 @@
 								type : "innerHTML"
 							},
 							
+							DebitCurrency : "unknown",
+							_setDebitCurrencyAttr : {
+								node : "debitCurrencyNode",
+								type : "innerHTML"
+							},
+							
+							PaymentCurrency : "unknown",
+							_setPaymentCurrencyAttr : {
+								node : "paymentCurrencyNode",
+								type : "innerHTML"
+							},
+							PaymentAmount : "unknown",
+							_setPaymentAmountAttr : {
+								node : "paymentAmountNode",
+								type : "innerHTML"
+							},
+							
+							
 							Date : "unknown",
 							_setDateAttr : {
 								node : "dateNode",
@@ -145,13 +166,28 @@
 							_setDescClassAttr : {
 								node : "descNode",
 								type : "class"
-							}/*,
+							},
 
-							phone : "unknown",
-							_setPhoneAttr : {
-								node : "phoneNode",
+							City : "unknown",
+							_setCityAttr : {
+								node : "cityNode",
 								type : "innerHTML"
-							}*/
+							},
+							Country : "unknown",
+							_setCountryAttr : {
+								node : "countryNode",
+								type : "innerHTML"
+							},
+							FeeAmount : "unknown",
+							_setFeeAmountAttr : {
+								node : "feeAmountNode",
+								type : "innerHTML"
+							},
+							FeeCurrency : "unknown",
+							_setFeeCurrencyAttr : {
+								node : "feeCurrencyNode",
+								type : "innerHTML"
+							}
 						});
 
 			});
@@ -520,7 +556,15 @@
 			
  				array.forEach(transactions, function(record) {
 				// Create our widget and place it
-				var widget = new TransactionRecord(record).placeAt(transactionPanel);
+				var widget = new TransactionRecord({Desc : record.Desc, 
+													DebitCurrency : record.TxnDetails.debitAcctCcy,
+													PaymentCurrency:  record.TxnDetails.paymentCcy, 
+													Date : record.Date,
+													PaymentAmount : record.TxnDetails.txnAmt.amt,
+													City : record.PyeeInfo.pyeeDetlInfo.pyeeDetlInfo.pyeeAddr.city,
+													Country : record.PyeeInfo.pyeeDetlInfo.pyeeDetlInfo.pyeeAddr.prov,
+													FeeAmount :  record.ChrgType.Fee.amt,
+													FeeCurrency : record.ChrgType.Fee.ccy}).placeAt(transactionPanel);
 				 widget.onmouseover = function() {
 								//TODO: real action - queries payments
 								dojo.empty("offersPanel");
