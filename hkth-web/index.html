@@ -38,6 +38,7 @@
 	width: 120px;
 	overflow: hidden;
 }
+
 </style>
 <script>
 	dojoConfig = {
@@ -68,9 +69,11 @@
 						{
 							templateString : "<div class='transactionRecord'>"
 									+ "<div><span data-dojo-attach-point='descNode'></span> <span data-dojo-attach-point='dateNode'></span></div>"
+									+ "<div>Country : <span data-dojo-attach-point='countryNode'></span></div>"
+									+ "<div>City : <span data-dojo-attach-point='cityNode'></span></div>"
 									+ "<div>Debit Currency: <span data-dojo-attach-point='debitCurrencyNode'></span></div>"
 									+ "<div>Payment: <span data-dojo-attach-point='paymentAmountNode'></span> <span data-dojo-attach-point='paymentCurrencyNode'></span></div>"
-									+ "<div>City : <span data-dojo-attach-point='cityNode'></span> Country : <span data-dojo-attach-point='countryNode'></span></div>"
+									
 									+ "<div>Fee : <span data-dojo-attach-point='feeAmountNode'></span>  <span data-dojo-attach-point='feeCurrencyNode'></span></div>"
 									+ "</div>",
 							// Attributes
@@ -419,17 +422,18 @@ function removeCharts () {
 			<table>
 				<tr>
 					<td width="300px">
-						<div data-dojo-type="dijit/layout/ContentPane"
-							data-dojo-props="region:'left'" style="position:relative; top:20px;">
-							<div data-dojo-type="dijit/layout/ContentPane">
-								Select Account:<br /><div id="accountSelectDiv"><select id="accountSelect"
+						<div data-dojo-type="dijit/layout/ContentPane">
+							<div data-dojo-type="dijit/layout/ContentPane" align="left">
+								<div style="font-size: 18px;" >Select Account:</div>
+								<div id="accountSelectDiv"><select id="accountSelect"
 									name="accountSelect" data-dojo-type="dijit/form/Select"
 									style="width: 300px;">
 								</select></div>
 								<div id="accountSelectDivStandBy" data-dojo-type="dojox/widget/Standby" data-dojo-props="target:'accountSelectDiv'"></div>
 							</div>
+							<div style="font-size: 18px;" align="left">Payments:</div>
 							<div data-dojo-type="dijit/layout/ContentPane"
-								id="transactionsPanel"></div>
+								id="transactionsPanel" align="left"></div>
 							<div id="transactionsPanelStandBy" data-dojo-type="dojox/widget/Standby" data-dojo-props="target:'transactionsPanel'"></div>
 						</div>
 					</td>
