@@ -4,6 +4,10 @@
 
 <link rel="stylesheet"
 	href="http://dojotoolkit.org/reference-guide/1.9/_static/js/dojo/../dijit/themes/claro/claro.css">
+<script type="text/javascript"
+	src="http://openlayers.org/api/OpenLayers.js"></script>
+<script src="http://maps.google.com/maps/api/js?v=3&amp;sensor=false"
+	type="text/javascript"></script>
 <style type="text/css">
 .transactionRecord {
 	border: 1px;
@@ -55,7 +59,7 @@
 	require(
 			[ "dojo/_base/declare", "dojo/parser", "dojo/ready",
 					"dijit/_WidgetBase", "dijit/_TemplatedMixin", "dojo/dom",
-					"dojo/parser", "dijit/form/Button" ],
+					"dojo/parser", "dojox/widget/Standby", "dijit/registry"],
 			function(declare, parser, ready, _WidgetBase, _TemplatedMixin) {
 
 				declare(
@@ -69,22 +73,19 @@
 									+ "<div>City : <span data-dojo-attach-point='cityNode'></span> Country : <span data-dojo-attach-point='countryNode'></span></div>"
 									+ "<div>Fee : <span data-dojo-attach-point='feeAmountNode'></span>  <span data-dojo-attach-point='feeCurrencyNode'></span></div>"
 									+ "</div>",
-
-									
-									
 							// Attributes
 							Desc : "unknown",
 							_setDescAttr : {
 								node : "descNode",
 								type : "innerHTML"
 							},
-							
+
 							DebitCurrency : "unknown",
 							_setDebitCurrencyAttr : {
 								node : "debitCurrencyNode",
 								type : "innerHTML"
 							},
-							
+
 							PaymentCurrency : "unknown",
 							_setPaymentCurrencyAttr : {
 								node : "paymentCurrencyNode",
@@ -95,8 +96,7 @@
 								node : "paymentAmountNode",
 								type : "innerHTML"
 							},
-							
-							
+
 							Date : "unknown",
 							_setDateAttr : {
 								node : "dateNode",
@@ -134,397 +134,323 @@
 			});
 </script>
 <script>
-	// **************************************
-	// ****** OFFER COMPONENT
-	// **************************************
-	require(
-			[ "dojo/_base/declare", "dojo/parser", "dojo/ready",
-					"dijit/_WidgetBase", "dijit/_TemplatedMixin", "dojo/dom",
-					"dojo/parser", "dijit/form/Button" , "dijit", "dojo/dom"],
-			function(declare, parser, ready, _WidgetBase, _TemplatedMixin) {
+	function getAccounts() {
+		require([ "dojo/_base/xhr", "dojo/dom", "dojo/_base/array",
+				"dojo/domReady!", "dijit/registry", "dojo/parser" ], function(xhr, dom, array) {
+			dijit.registry.byId("accountSelectDivStandBy").show();
+			// Keep hold of the container node
+			var containerNode = dom.byId("debug");
 
-				declare(
-						"OfferRecord",
-						[ _WidgetBase, _TemplatedMixin ],
-						{
-							templateString : "<div class='offerRecord'>"
-									+ "<div><span data-dojo-attach-point='titleNode'></span></div>"
-									+ "<div><span data-dojo-attach-point='descNode'></span></div>"
-									+ "</div>",
-
-							// Attributes
-							title : "unknown",
-							_setTitleAttr : {
-								node : "titleNode",
-								type : "innerHTML"
-							},
-
-							titleClass : "titleClass",
-							_setTitleClassAttr : {
-								node : "titleNode",
-								type : "class"
-							},
-
-							desc : "unknown",
-							_setDescAttr : {
-								node : "descNode",
-								type : "innerHTML"
-							}
+			// Using xhr.get, as we simply want to retrieve information
+			xhr.get({
+				// The URL of the request
+				url : "/hkth-rest-api/a/accounts",
+				// Handle the result as JSON data
+				handleAs : "json",
+				// The success handler
+				load : function(jsonData) {
+					var accountSelect = dijit.byId('accountSelect');
+					array.forEach(jsonData, function(record) {
+						// Create our widget and place it
+						accountSelect.addOption({
+							"label" : record.desc + " " + record.accountNum,
+							"value" : record.id
 						});
-				
-
+					});
+					dijit.registry.byId("accountSelectDivStandBy").hide();
+					getPayments();
+				},
+				// The error handler
+				error : function(e) {
+					containerNode.innerHTML = e;
+					dijit.registry.byId("accountSelectDivStandBy").hide();
+				}
 			});
-</script>
-<script>
 
-		
-</script>
-<script>
-	//data
-	accounts = [
-   {
-	      "desc": "Super Ease",
-	      "hasParent": false,
-	      "ccy": {
-	         "desc": "",
-	         "code": "HKD"
-	      },
-	      "accountNum": "001-029784-288",
-	      "type": "SEE",
-	      "id": "001029784288~~SS~~SEE~~HKD~~Super Ease~~DDA~~2C288HKD       HKDSSSEE",
-	      "balance": "-3,998.45",
-	      "drCr": true,
-	      "hasAcctDtl": true
-	   },
-	   {
-	      "desc": "HSBC Premier",
-	      "hasParent": false,
-	      "ccy": {
-	         "desc": "",
-	         "code": "HKD"
-	      },
-	      "accountNum": "001-072487-888",
-	      "type": "MST",
-	      "id": "001072487888~~AV~~MST~~HKD~~HSBC Premier~~DDA~~2B888HKD       HKDAVMST",
-	      "balance": "",
-	      "drCr": false,
-	      "hasAcctDtl": false
-	   },
-	   {
-	      "desc": "HKD Savings",
-	      "hasParent": true,
-	      "ccy": {
-	         "desc": "",
-	         "code": "HKD"
-	      },
-	      "accountNum": "001-072487-888",
-	      "type": "SAV",
-	      "id": "001072487888~~AV~~SAV~~HKD~~HSBC Premier HKD Savings~~DDA~~2A888HKD       HKDAVSAV",
-	      "balance": "68,776,514.04",
-	      "drCr": false,
-	      "hasAcctDtl": true
-	   },
-	   {
-	      "desc": "GBP Savings",
-	      "hasParent": true,
-	      "ccy": {
-	         "desc": "",
-	         "code": "GBP"
-	      },
-	      "accountNum": "001-072487-888",
-	      "type": "SAV",
-	      "id": "001072487888~~AV~~SAV~~GBP~~HSBC Premier GBP Savings~~DDA~~2F888GBP       GBPAVSAV",
-	      "balance": "Balance Not Available",
-	      "drCr": false,
-	      "hasAcctDtl": false
-	   },
-	   {
-	      "desc": "SGD Savings",
-	      "hasParent": true,
-	      "ccy": {
-	         "desc": "",
-	         "code": "SGD"
-	      },
-	      "accountNum": "001-072487-888",
-	      "type": "SAV",
-	      "id": "001072487888~~AV~~SAV~~SGD~~HSBC Premier SGD Savings~~DDA~~2F888SGD       SGDAVSAV",
-	      "balance": "Balance Not Available",
-	      "drCr": false,
-	      "hasAcctDtl": false
-	   },
-	   
-	   {
-	      "desc": "Investment Services",
-	      "hasParent": true,
-	      "ccy": {
-	         "desc": "",
-	         "code": "HKD"
-	      },
-	      "accountNum": "001-072487-888",
-	      "type": "INV",
-	      "id": "001072487888~~AV~~INV~~HKD~~HSBC Premier Investment Services~~DDA~~2R888HKD       HKDAVINV",
-	      "balance": "Balance Not Available",
-	      "drCr": false,
-	      "hasAcctDtl": false
-	   },
-	   {
-	      "desc": "USD Savings",
-	      "hasParent": true,
-	      "ccy": {
-	         "desc": "",
-	         "code": "USD"
-	      },
-	      "accountNum": "004-291209-888",
-	      "type": "SAV",
-	      "id": "004291209888~~AV~~SAV~~USD~~HSBC Premier USD Savings~~DDA~~2F888USD       USDAVSAV",
-	      "balance": "82,751.56",
-	      "drCr": false,
-	      "hasAcctDtl": true
-	   },
-	   {
-	      "desc": "Time Deposit",
-	      "hasParent": true,
-	      "ccy": {
-	         "desc": "",
-	         "code": "   "
-	      },
-	      "accountNum": "004-291209-888",
-	      "type": "TMS",
-	      "id": "0042912098880000~~AV~~TMS~~   ~~HSBC Premier Time Deposit~~DDA~~4T888             AVTMS",
-	      "balance": "Details",
-	      "drCr": false,
-	      "hasAcctDtl": true
-	   },
-	   {
-	      "desc": "Statement Gold",
-	      "hasParent": false,
-	      "ccy": {
-	         "desc": "",
-	         "code": "MACE"
-	      },
-	      "accountNum": "068-000934-261",
-	      "type": "GLD",
-	      "id": "068000934261~~SS~~GLD~~GLT~~Statement Gold~~DDA~~2W261GLT       GLTSSGLD",
-	      "balance": "0",
-	      "drCr": false,
-	      "hasAcctDtl": true
-	   }
-	]
-
-	transactions = [ 
-   {
-      "ID": "12345",
-      "Desc": "Buying 10 units of X",
-      "Date": "20140611",
-      "PyeeInfo": {
-         "pyeeDetlInfo": {
-            "pyeeDetlInfo": {
-               "pyeeTyp": "Personal",
-               "pyeeID": "1",
-               "pyeeName": "Mary Smith",
-               "pyeeCtry": "UK",
-               "pyeeAddr": {
-                  "addrFrmtTyp": "Address line 1 (Mandatory) •   Address line 2 (Optional) •   Address line 3 (Optional) •   Country (Mandatory)  Format B •  Address line 1 (Mandatory) •   Address line 2 (Optional) •   City (Mandatory) •   Province/State (Optional) •   Postal Code/Zip Code (Optional) •   Country (Mandatory)",
-                  "line1": "Unit 7",
-                  "line2": "123 Abc Street",
-                  "city": "London",
-                  "prov": "England",
-                  "postalCde": "E14 8K8",
-                  "ctryCde": "UK"
-               }
-            },
-            "pyeeFinInstInfo": {
-               "bankName": "Citibank",
-               "bankCdeTyp": "1",
-               "bankCde": "12345",
-               "acctNum": "111-222222-333",
-               "acctCcy": "GBP",
-               "prodCatCde": "DDA",
-               "bankAddr": {
-                  "addrFrmtTyp": "Address line 1 (Mandatory) •   Address line 2 (Optional) •   Address line 3 (Optional) •   Country (Mandatory)  Format B •  Address line 1 (Mandatory) •   Address line 2 (Optional) •   City (Mandatory) •   Province/State (Optional) •   Postal Code/Zip Code (Optional) •   Country (Mandatory)",
-                  "line1": "Citibank",
-                  "line2": "1 Bank Street",
-                  "city": "London",
-                  "prov": "Endland",
-                  "postalCde": "SW1 1N1",
-                  "ctryCde": "UK"
-               }
-            }
-         }
-      },
-      "TxnDetails": {
-         "debitAcctCcy": "GBP",
-         "paymentCcy": "GBP",
-         "txnAmt": {
-            "amt": "100",
-            "ccy": "GBP"
-         }
-      },
-      "TxnSchedDtl": {
-         "txnSchedTyp": "PN",
-         "txnSchedDate": ""
-      },
-      "ChrgType": {
-         "chargeTye": "1",
-         "chargeAcct": "1",
-         "Fee": {
-            "amt": "10",
-            "ccy": "GBP"
-         }
-      }
-   },
-   {
-      "ID": "12346",
-      "Desc": "Buying 10 units of X",
-      "Date": "20140611",
-      "PyeeInfo": {
-         "pyeeDetlInfo": {
-            "pyeeDetlInfo": {
-               "pyeeTyp": "Corporate",
-               "pyeeID": "2",
-               "pyeeName": "XYZ Shop",
-               "pyeeCtry": "France",
-               "pyeeAddr": {
-                  "addrFrmtTyp": "Address line 1 (Mandatory) •   Address line 2 (Optional) •   Address line 3 (Optional) •   Country (Mandatory)  Format B •  Address line 1 (Mandatory) •   Address line 2 (Optional) •   City (Mandatory) •   Province/State (Optional) •   Postal Code/Zip Code (Optional) •   Country (Mandatory)",
-                  "line1": "Unite1",
-                  "line2": "123 Abc Street",
-                  "city": "Paris",
-                  "prov": "France",
-                  "postalCde": "E14 8K8",
-                  "ctryCde": "FR"
-               }
-            },
-            "pyeeFinInstInfo": {
-               "bankName": "BNP Paris Bas",
-               "bankCdeTyp": "2",
-               "bankCde": "12346",
-               "acctNum": "111-222222-334",
-               "acctCcy": "EUR",
-               "prodCatCde": "DDA",
-               "bankAddr": {
-                  "addrFrmtTyp": "Address line 1 (Mandatory) •   Address line 2 (Optional) •   Address line 3 (Optional) •   Country (Mandatory)  Format B •  Address line 1 (Mandatory) •   Address line 2 (Optional) •   City (Mandatory) •   Province/State (Optional) •   Postal Code/Zip Code (Optional) •   Country (Mandatory)",
-                  "line1": "BNP Paris Bas",
-                  "line2": "1 Bank Street",
-                  "city": "Paris",
-                  "prov": "France",
-                  "postalCde": "SW1 1N1",
-                  "ctryCde": "FR"
-               }
-            }
-         }
-      },
-      "TxnDetails": {
-         "debitAcctCcy": "EUR",
-         "paymentCcy": "GBP",
-         "txnAmt": {
-            "amt": "100000",
-            "ccy": "GBP"
-         }
-      },
-      "TxnSchedDtl": {
-         "txnSchedTyp": "PN",
-         "txnSchedDate": ""
-      },
-      "ChrgType": {
-         "chargeTye": "1",
-         "chargeAcct": "1",
-         "Fee": {
-            "amt": "100",
-            "ccy": "GBP"
-         }
-      }
-   }
-	];
-
-	offers = [ {
-		"title" : "Special Offer No1",
-		"desc" : "<p>The special offer....</p><p>Must be in new paragraph</p>"
-	}, {
-		"title" : "Special Offer No2",
-		"desc" : "<p>The special offer....</p><p>Must be in new paragraph</p>"
+		});
 	}
-	/* More authors here... */
-	]
+
+	function getPayments() {
+		require(
+				[ "dojo/_base/xhr", "dojo/dom", "dojo/_base/array",
+						"dojo/domReady!" ],
+				function(xhr, dom, array) {
+					dijit.registry.byId("transactionsPanelStandBy").show();
+					dijit.registry.byId("offersPanelStandBy").show();
+					dijit.registry.byId("mapStandBy").show();
+					// Keep hold of the container node
+					var containerNode = dom.byId("debug");
+					
+					// Using xhr.get, as we simply want to retrieve information
+					xhr
+							.get({
+								// The URL of the request
+								url : "/hkth-rest-api/p/payments",
+								// Handle the result as JSON data
+								handleAs : "json",
+								// The success handler
+								load : function(jsonData) {
+									dom.byId("transactionFee").innerHTML = "HSBC may propose you product that saves "
+											+ jsonData.txFeeOptimisationSum
+											+ " on transaction fees";
+									dom.byId("transferRate").innerHTML = "HSBC may propose you product that saves "
+											+ jsonData.txFxOptimisationSUm
+											+ " on currency exchange rates";
+
+									dojo.empty("transactionsPanel");
+									var transactionPanel = dom
+											.byId("transactionsPanel");
+									array
+											.forEach(
+													jsonData.payments,
+													function(record) {
+														// Create our widget and place it
+														var widget = new TransactionRecord(
+																{
+																	Desc : record.Desc,
+																	DebitCurrency : record.TxnDetails.debitAcctCcy,
+																	PaymentCurrency : record.TxnDetails.paymentCcy,
+																	Date : record.Date,
+																	PaymentAmount : record.TxnDetails.txnAmt.amt,
+																	City : record.PyeeInfo.pyeeDetlInfo.pyeeDetlInfo.pyeeAddr.city,
+																	Country : record.PyeeInfo.pyeeDetlInfo.pyeeDetlInfo.pyeeAddr.prov,
+																	FeeAmount : record.ChrgType.Fee.amt,
+																	FeeCurrency : record.ChrgType.Fee.ccy
+																})
+																.placeAt(transactionPanel);
+														draw(widget.City, widget.Country, widget.PaymentAmount, widget.FeeAmount, widget.PaymentCurrency);
+
+													});
+									dijit.registry.byId("transactionsPanelStandBy").hide();
+									dijit.registry.byId("offersPanelStandBy").hide();
+									dijit.registry.byId("mapStandBy").hide();
+								},
+								// The error handler
+								error : function(e) {
+									containerNode.innerHTML = e;
+									dijit.registry.byId("transactionsPanelStandBy").hide();
+									dijit.registry.byId("offersPanelStandBy").hide();
+									dijit.registry.byId("transactionsPanelStandBy").hide();
+									dijit.registry.byId("mapStandBy").hide();
+									
+								}
+							});
+
+				});
+	}
+</script>
+<script>
+	require([ "dojo/ready" ], function(ready) {
+		ready(function() {
+			var accountSelect = dijit.byId('accountSelect');
+			getAccounts();
+
+			accountSelect.onChange = function() {
+				removeCharts ();
+				getPayments();
+			}
+		});
+	});
+</script>
+<script>
+var map;
+var drawn = false;
+var radius = [60,100,120];
+//var chartData = [[10000, 9200, 11811, 7662], [10000, 4000, 11811, 6000, 17662], [14000, 10200, 5000]];
+
+var chartLayers = [];
+function draw(city, country, payment, fee, currency)
+{
+
+	
+	var chartData = [parseFloat(payment), parseFloat(payment)-parseFloat(fee)]
+	if (payment <= 100)
+		var radius = 60;
+	else if (payment <= 1000)
+		var radius = 90;
+	else 
+		var radius = 120;
+	
+	var location = city + ", " + country;
+	
+	var geocoderRequest = {address : location}; 
+	
+	var text = ["You paid " + payment + " " + currency + " paying " + fee + " " + currency + " of fee.", "You could paid only " + (payment-fee) + " " + currency + ", saving " + fee + " " +currency +"." ];
+	
+	require([ "dojo/ready", "dojo/dom-construct", "dojo/dom",
+			"dojo/_base/window", "dojox/geo/openlayers/Map",
+			"dojox/geo/openlayers/Layer", "dojox/geo/openlayers/WidgetFeature",
+			"dojox/charting/widget/Chart", "dojox/charting/widget/Chart2D",
+			"dojox/charting/plot2d/Pie", "dojox/charting/themes/Claro",
+			"dojox/charting/action2d/Tooltip",
+			"dojox/charting/action2d/MoveSlice", "dojo/on", 
+			"dojo/_base/array"], function(ready,
+			domConstruct, dom, win, Map, Layer, WidgetFeature, Chart, Chart2D,
+			Pie, claro, Tooltip, MoveSlice, on, array) {
+
+		//ready(function() {
+			var geocoder = new google.maps.Geocoder();
+						
+			
+				geocoder.geocode(geocoderRequest, function(results, status) {
+					if (status == "OK") {
+						var a = results[0].geometry.location.A;
+						var k = results[0].geometry.location.k;
+						paintChart(chartData, a, k, radius, text);
+					}
+				});
+			
+			
+
+			
+
+			claro.chart.fill = "transparent";
+			claro.chart.stroke = {
+				color : "transparent"
+			};
+
+			// create a map widget and place it on the page.
+			if (! drawn)
+			{
+				map = new Map("map", {
+					baseLayerType : dojox.geo.openlayers.BaseLayerType.GOOGLE
+				});
+	
+				var start = {
+					latitude : 48.1351253,
+					longitude : 11.58198059
+				};
+				map.fitTo({
+					position : [ start.longitude, start.latitude ],
+					extent : 9
+				});
+	
+				var div = domConstruct.create("div", {}, win.body());
+			}
+			drawn = true;
+			
+			
+			
+			
+			
+			function paintChart(chartData, longitude, latitude, radius, text) {
+				// Create the chart within it's "holding" node
+				var chart = new Chart2D("chartNode");
+				var c = chart.chart;
+
+				c.setTheme(claro);
+				c.addPlot("default", {
+					type : "Pie",
+					markers : true,
+					fontColor: "transparent",
+				});
+
+				c.addAxis("x");
+				c.addAxis("y", {
+					min : 5000,
+					max : 30000,
+					vertical : true,
+					fixLower : "major",
+					fixUpper : "major"
+				});
+
+				// Add the series of data
+				c.addSeries("A", chartData);
+				
+				
+				
+				// Create the tooltip
+				var tip = new Tooltip(c, "default", {
+					text: function(o){
+				          return text[o.index];
+				       }
+				});
+				
+				
+				       
+				
+				
+				// Create the slice mover
+				var mag = new MoveSlice(c, "default");
+
+				var descr = {
+					longitude : longitude,
+					latitude : latitude,
+					widget : chart,
+					width : radius,
+					height : radius
+				};
+				feature = new WidgetFeature(descr);
+
+				layer = new Layer();
+				layer.addFeature(feature);
+				map.addLayer(layer);
+				chartLayers.push(layer);
+				// fit to New York with 0.1 degrees extent
+
+				c.surface.rawNode.childNodes[1].setAttribute('fill-opacity',
+						'0');
+				c.surface.rawNode.childNodes[2].setAttribute('stroke-opacity',
+						'0');
+				c.surface.rawNode.childNodes[3].setAttribute('fill-opacity',
+						'0');
+
+			}
+
+		//});
+	});
+}
+
+function removeCharts () {
+	if (chartLayers.length) {
+		for (i = 0; i < chartLayers.length; i++)
+		{
+			map.removeLayer(chartLayers[i]);
+		}
+		chartLayers = [];
+	}
+}
 </script>
 </head>
 <body class="claro">
-	<div style="border: solid black 1px; width: 900px;">
+	<div style="border: solid black 1px; width: 1200px;">
 		<div data-dojo-type="dijit/TitlePane"
 			data-dojo-props="title: 'Abroad Payments'">
 			<table>
 				<tr>
 					<td width="300px">
 						<div data-dojo-type="dijit/layout/ContentPane"
-							data-dojo-props="region:'left'">
+							data-dojo-props="region:'left'" style="position:relative; top:20px;">
 							<div data-dojo-type="dijit/layout/ContentPane">
-								Select Account:<br /> <select id="accountSelect"
+								Select Account:<br /><div id="accountSelectDiv"><select id="accountSelect"
 									name="accountSelect" data-dojo-type="dijit/form/Select"
 									style="width: 300px;">
-
-								</select>
+								</select></div>
+								<div id="accountSelectDivStandBy" data-dojo-type="dojox/widget/Standby" data-dojo-props="target:'accountSelectDiv'"></div>
 							</div>
 							<div data-dojo-type="dijit/layout/ContentPane"
 								id="transactionsPanel"></div>
+							<div id="transactionsPanelStandBy" data-dojo-type="dojox/widget/Standby" data-dojo-props="target:'transactionsPanel'"></div>
 						</div>
 					</td>
-					<td width="600px">
+					<td width="800px">
 						<div data-dojo-type="dijit/layout/ContentPane"
-							data-dojo-props="region:'right'">
-							<div data-dojo-type="dijit/layout/ContentPane" id="offersPanel">
-							<div> </div>
-							<div> </div>
+							data-dojo-props="region:'right'" style="float:top; top:20px;">
+							<div data-dojo-type="dijit/layout/ContentPane" id="offersPanel" style="float:top; top:20px;">
+								<div id="transactionFee"></div>
+								<div id="transferRate"></div>
 							</div>
-							<div data-dojo-type="dijit/layout/ContentPane" id="map">MAP</div>
+							<div id="offersPanelStandBy" data-dojo-type="dojox/widget/Standby" data-dojo-props="target:'offersPanel'"></div>
+							<br/>
+							<br/>
+							<div data-dojo-type="dijit/layout/ContentPane" id="map" style="float:top; background-color: #b5d0d0; width: 800px; height: 400px; border: 2px solid black; "></div>
+							<div id="mapStandBy" data-dojo-type="dojox/widget/Standby" data-dojo-props="target:'map'"></div>
 						</div>
 					</td>
 				</tr>
 			</table>
 		</div>
 	</div>
-	<button data-dojo-type="dijit/form/Button" type="button">
-		Click me too!
-		<script type="dojo/on" data-dojo-event="click" data-dojo-args="evt">
-        require(["dojo/dom", "dojo/_base/array", "dijit", "dojo/on"], function(dom, array, dijit){
-			//load select account
-			var accountSelect = dijit.byId('accountSelect');
-			array.forEach(accounts, function(record) {
-				// Create our widget and place it
-				accountSelect.addOption( { "label": record.desc + " " + record.accountNum, "value" : record.id});
-			});
-
-			accountSelect.onChange = function() {
-				
-				dojo.empty("transactionsPanel");
-				
-            	var transactionPanel = dom.byId("transactionsPanel");
-			
- 				array.forEach(transactions, function(record) {
-				// Create our widget and place it
-				var widget = new TransactionRecord({Desc : record.Desc, 
-													DebitCurrency : record.TxnDetails.debitAcctCcy,
-													PaymentCurrency:  record.TxnDetails.paymentCcy, 
-													Date : record.Date,
-													PaymentAmount : record.TxnDetails.txnAmt.amt,
-													City : record.PyeeInfo.pyeeDetlInfo.pyeeDetlInfo.pyeeAddr.city,
-													Country : record.PyeeInfo.pyeeDetlInfo.pyeeDetlInfo.pyeeAddr.prov,
-													FeeAmount :  record.ChrgType.Fee.amt,
-													FeeCurrency : record.ChrgType.Fee.ccy}).placeAt(transactionPanel);
-				 widget.onmouseover = function() {
-								//TODO: real action - queries payments
-								dojo.empty("offersPanel");
-								var offersContainer = dom.byId("offersPanel");
-									array.forEach(offers, function(record) {
-									// Create our widget and place it
-									var widget = new OfferRecord(record).placeAt(offersContainer);
-								});
-				};
-								
-			});
-			}
-
-
-        });
-    </script>
-	</button>
+	<div id="debug"></div>
 </body>
 </html>
