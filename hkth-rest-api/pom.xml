@@ -9,9 +9,14 @@
 	</parent>
 
 	<modelVersion>4.0.0</modelVersion>
-	<artifactId>hkth-api-consumer</artifactId>
+	<artifactId>hkth-rest-api</artifactId>
 
 	<dependencies>
+
+		<dependency>
+			<groupId>hsbc.hkth</groupId>
+			<artifactId>hkth-api-consumer</artifactId>
+		</dependency>
 
 		<dependency>
 			<groupId>junit</groupId>
@@ -21,6 +26,21 @@
 		<dependency>
 			<groupId>com.google.code.gson</groupId>
 			<artifactId>gson</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>com.sun.jersey</groupId>
+			<artifactId>jersey-server</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>com.sun.jersey</groupId>
+			<artifactId>jersey-servlet</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>com.sun.jersey</groupId>
+			<artifactId>jersey-json</artifactId>
 		</dependency>
 
 	</dependencies>

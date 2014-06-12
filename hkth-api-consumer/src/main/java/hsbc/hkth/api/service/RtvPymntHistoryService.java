@@ -6,8 +6,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonParser;
 
 public class RtvPymntHistoryService {
@@ -15,12 +14,12 @@ public class RtvPymntHistoryService {
 	private static final String RTV_PYMNT_HISTORY_REQUEST_JS_FILE = "RtvPymntHistoryRequest.js";
 
 	private String url = "http://54.187.226.118:8281/RtrvPymntHistory/1";
-	private String contentType = "application/x-www-form-urlencoded";
+	private String contentType = "application/json";
 
-	
-	public JsonObject retrievePaymentHistory() {
+	public JsonArray retrievePaymentHistory() {
 
-		String path = ClassLoader.getSystemResource(RTV_PYMNT_HISTORY_REQUEST_JS_FILE).getPath();
+		String path = ClassLoader.getSystemResource(
+				RTV_PYMNT_HISTORY_REQUEST_JS_FILE).getPath();
 		StringBuffer requestPayload = new StringBuffer();
 
 		try (FileReader fr = new FileReader(path);
@@ -33,20 +32,20 @@ public class RtvPymntHistoryService {
 			e.printStackTrace();
 			return null;
 		}
-		
+
 		PostRequestSender requestSender = new PostRequestSender();
 		String response = null;
 
 		try {
-			response = requestSender.sendPost(url, contentType, requestPayload.toString());
+			response = requestSender.sendPost(url, contentType,
+					requestPayload.toString());
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
 		}
 
-		JsonObject jsonObject = new JsonParser().parse(response).getAsJsonObject();
-		
-		return jsonObject;
+		JsonArray responseArray = new JsonParser().parse(response).getAsJsonArray();
+		return responseArray;
 	}
 
 }
