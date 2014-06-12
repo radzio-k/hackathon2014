@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<link rel="stylesheet"
+	href="http://dojotoolkit.org/reference-guide/1.9/_static/js/dojo/../dijit/themes/claro/claro.css">
+<style type="text/css">
+.transactionRecord {
+	border: 1px;
+	margin: 1em;
+}
+
+.offerRecord {
+	border: 1px;
+}
+
+.employeeName {
+	color: blue;
+}
+
+.specialEmployeeName {
+	color: red;
+}
+
+.titleClass {
+	color: blue;
+}
+
+.tundra .dijitSelect .dijitButtonText {
+	text-align: left;
+}
+
+.tundra .dijitSelectLabel {
+	width: 120px;
+	overflow: hidden;
+}
+</style>
+<script>
+	dojoConfig = {
+		parseOnLoad : true
+	}
+</script>
+<script
+	src='http://dojotoolkit.org/reference-guide/1.9/_static/js/dojo/dojo.js'></script>
+
+<script>
+	require([ "dijit/form/Select", "dojo/domReady!" ], function() {
+
+	});
+</script>
+<script>
+	// **************************************
+	// ****** TRANSACTION RECORD COMPONENT
+	// **************************************
+	require(
+			[ "dojo/_base/declare", "dojo/parser", "dojo/ready",
+					"dijit/_WidgetBase", "dijit/_TemplatedMixin", "dojo/dom",
+					"dojo/parser", "dijit/form/Button" ],
+			function(declare, parser, ready, _WidgetBase, _TemplatedMixin) {
+
+				declare(
+						"TransactionRecord",
+						[ _WidgetBase, _TemplatedMixin ],
+						{
+							templateString : "<div class='transactionRecord'>"
+									+ "<div>Name: <span data-dojo-attach-point='nameNode'></span></div>"
+									+ "<div>Phone #: <span data-dojo-attach-point='phoneNode'></span></div>"
+									+ "</div>",
+
+							// Attributes
+							name : "unknown",
+							_setNameAttr : {
+								node : "nameNode",
+								type : "innerHTML"
+							},
+
+							nameClass : "employeeName",
+							_setNameClassAttr : {
+								node : "nameNode",
+								type : "class"
+							},
+
+							phone : "unknown",
+							_setPhoneAttr : {
+								node : "phoneNode",
+								type : "innerHTML"
+							}
+						});
+
+			});
+</script>
+<script>
+	// **************************************
+	// ****** OFFER COMPONENT
+	// **************************************
+	require(
+			[ "dojo/_base/declare", "dojo/parser", "dojo/ready",
+					"dijit/_WidgetBase", "dijit/_TemplatedMixin", "dojo/dom",
+					"dojo/parser", "dijit/form/Button" , "dijit", "dojo/dom"],
+			function(declare, parser, ready, _WidgetBase, _TemplatedMixin) {
+
+				declare(
+						"OfferRecord",
+						[ _WidgetBase, _TemplatedMixin ],
+						{
+							templateString : "<div class='offerRecord'>"
+									+ "<div><span data-dojo-attach-point='titleNode'></span></div>"
+									+ "<div><span data-dojo-attach-point='descNode'></span></div>"
+									+ "</div>",
+
+							// Attributes
+							title : "unknown",
+							_setTitleAttr : {
+								node : "titleNode",
+								type : "innerHTML"
+							},
+
+							titleClass : "titleClass",
+							_setTitleClassAttr : {
+								node : "titleNode",
+								type : "class"
+							},
+
+							desc : "unknown",
+							_setDescAttr : {
+								node : "descNode",
+								type : "innerHTML"
+							}
+						});
+				
+
+			});
+</script>
+<script>
+
+		
+</script>
+<script>
+	//data
+	accounts = [ {
+		"label" : "",
+		"value" : "-1"
+	}, {
+		"label" : "Account 1 0000	0000	0000	00000	000000	923932939233243423432432423	11111",
+		"value" : "1"
+	}, {
+		"label" : "Account 2",
+		"value" : "2"
+	}, {
+		"label" : "Account 3",
+		"value" : "3"
+	} ]
+
+	transactions = [ {
+		"name" : "Brian Arnold",
+		"phone" : "(800) 555-1212"
+	}, {
+		"name" : "ASASASASS",
+		"phone" : "(800) CALL-CTU",
+		"nameClass" : "specialEmployeeName"
+	}
+	/* More authors here... */
+	]
+
+	offers = [ {
+		"title" : "Special Offer No1",
+		"desc" : "<p>The special offer....</p><p>Must be in new paragraph</p>"
+	}, {
+		"title" : "Special Offer No2",
+		"desc" : "<p>The special offer....</p><p>Must be in new paragraph</p>"
+	}
+	/* More authors here... */
+	]
+</script>
+</head>
+<body class="claro">
+	<div style="border: solid black 1px; width: 900px;">
+		<div data-dojo-type="dijit/TitlePane"
+			data-dojo-props="title: 'Abroad Payments'">
+			<table>
+				<tr>
+					<td width="300px">
+						<div data-dojo-type="dijit/layout/ContentPane"
+							data-dojo-props="region:'left'">
+							<div data-dojo-type="dijit/layout/ContentPane">
+								Select Account:<br /> <select id="accountSelect"
+									name="accountSelect" data-dojo-type="dijit/form/Select"
+									style="width: 300px;">
+
+								</select>
+							</div>
+							<div data-dojo-type="dijit/layout/ContentPane"
+								id="transactionsPanel"></div>
+						</div>
+					</td>
+					<td width="600px">
+						<div data-dojo-type="dijit/layout/ContentPane"
+							data-dojo-props="region:'right'">
+							<div data-dojo-type="dijit/layout/ContentPane" id="offersPanel">Offer</div>
+							<div data-dojo-type="dijit/layout/ContentPane" id="map">MAP</div>
+						</div>
+					</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+	<button data-dojo-type="dijit/form/Button" type="button">
+		Click me too!
+		<script type="dojo/on" data-dojo-event="click" data-dojo-args="evt">
+        require(["dojo/dom", "dojo/_base/array", "dijit", "dojo/on"], function(dom, array, dijit){
+			//load select account
+			var accountSelect = dijit.byId('accountSelect');
+			array.forEach(accounts, function(record) {
+				// Create our widget and place it
+				accountSelect.addOption(record);
+			});
+
+			accountSelect.onChange = function() {
+			dojo.empty("transactionsPanel");
+            var transactionPanel = dom.byId("transactionsPanel");
+			
+ 			array.forEach(transactions, function(record) {
+				// Create our widget and place it
+				var widget = new TransactionRecord(record).placeAt(transactionPanel);
+				 widget.onmouseover = function() {
+								//TODO: real action - queries payments
+								dojo.empty("offersPanel");
+								var offersContainer = dom.byId("offersPanel");
+									array.forEach(offers, function(record) {
+									// Create our widget and place it
+									var widget = new OfferRecord(record).placeAt(offersContainer);
+								});
+};
+								
+			});
+			}
+
+
+        });
+    </script>
+	</button>
+</body>
+</html>
