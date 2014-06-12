@@ -8,7 +8,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 
 @Path("/p")
 public class PaymentsREST {
@@ -18,7 +18,7 @@ public class PaymentsREST {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response responseMsg() {
 		PaymentsBO paymentsBO = new PaymentsBO();
-		JsonArray payments = paymentsBO.getPaymentsForAccount();
+		JsonObject payments = paymentsBO.getPaymentsForAccount();
 		
 		return Response.status(200).entity(payments.toString()).build();
 	}
