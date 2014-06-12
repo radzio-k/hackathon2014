@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import hsbc.hkth.api.service.RtvPymntHistoryService;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 import org.junit.Test;
 
@@ -21,7 +22,7 @@ public class CalculateTxSumServiceTest {
 		BigDecimal expectedTxFeeSum = new BigDecimal(3710);
 		int expectedCountTx = 15;
 		BigDecimal expectedtxFeeOptim = new BigDecimal(3560);
-		BigDecimal expectedtxSumFXOptim = new BigDecimal(3560);
+		BigDecimal expectedtxSumFXOptim = new BigDecimal(3563100.00).setScale(2, RoundingMode.HALF_UP);;
 		
 		CalculateTxSumService serviceTxSum = new CalculateTxSumService();
 		CalculateTxFeeSumService serviceTxFeeSum = new CalculateTxFeeSumService();
@@ -39,7 +40,7 @@ public class CalculateTxSumServiceTest {
 		int countTxGBPtoEUR = countTxService.countGBPtoEURTxFromJSonArray(respPymntHist);
 		BigDecimal txFeeOptim = txFeeOptimService.calculateGBPtoEURTxFeeOptimSumFromJSonArray(respPymntHist);
 		BigDecimal txSumFXOptim = txFXOptimService.calculateGBPtoEURTxFXOptimSumFromJSonArray(respPymntHist);
-		
+		System.out.println(txSumFXOptim);
 		// then
 		assertEquals(expectedTxSum, respTxSum);
 		assertEquals(expectedTxFeeSum, respTxFeeSum);

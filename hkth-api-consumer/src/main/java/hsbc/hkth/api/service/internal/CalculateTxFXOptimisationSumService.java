@@ -1,19 +1,23 @@
 package hsbc.hkth.api.service.internal;
 
+import hsbc.hkth.api.service.GspRtrvFxRatesService;
+
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 
 public class CalculateTxFXOptimisationSumService {
 	
 	public BigDecimal calculateGBPtoEURTxFXOptimSumFromJSonArray(JsonArray txPymntHist){
-		BigDecimal txFeeOptimSum = new BigDecimal(10);
-		CountTxService countTxService = new CountTxService();
-
-		txFeeOptimSum = txFeeOptimSum.multiply(new BigDecimal(countTxService.countGBPtoEURTxFromJSonArray(txPymntHist)));
+		//fake call to simulate API call
+		GspRtrvFxRatesService service = new GspRtrvFxRatesService();
+		JsonObject response = service.retrieveFXRates();
 		
-		CalculateTxFeeSumService serviceTxFeeSum = new CalculateTxFeeSumService();
+		CalculateTxSumService serviceTxSum = new CalculateTxSumService();
+		BigDecimal respTxSum = serviceTxSum.calculateGBPtoEURTxSumFromJSonArray(txPymntHist);
 		
-		return serviceTxFeeSum.calculateGBPtoEURTxFeeSumFromJSonArray(txPymntHist).subtract(txFeeOptimSum);
+		return respTxSum.multiply(new BigDecimal(0.963)).setScale(2, RoundingMode.HALF_UP);
 	}
 }
