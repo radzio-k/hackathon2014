@@ -63,28 +63,95 @@
 						[ _WidgetBase, _TemplatedMixin ],
 						{
 							templateString : "<div class='transactionRecord'>"
-									+ "<div>Name: <span data-dojo-attach-point='nameNode'></span></div>"
+									+ "<div>Name: <span data-dojo-attach-point='descNode'></span> <span data-dojo-attach-point='dateNode'></span></div>"
 									+ "<div>Phone #: <span data-dojo-attach-point='phoneNode'></span></div>"
 									+ "</div>",
 
+									
+									/*{
+										      "ID": "12346",
+										      "Desc": "Buying 10 units of X",
+										      "Date": "20140611",
+										      "PyeeInfo": {
+										         "pyeeDetlInfo": {
+										            "pyeeDetlInfo": {
+										               "pyeeTyp": "Corporate",
+										               "pyeeID": "2",
+										               "pyeeName": "XYZ Shop",
+										               "pyeeCtry": "France",
+										               "pyeeAddr": {
+										                  "addrFrmtTyp": "Address line 1 (Mandatory) •   Address line 2 (Optional) •   Address line 3 (Optional) •   Country (Mandatory)  Format B •  Address line 1 (Mandatory) •   Address line 2 (Optional) •   City (Mandatory) •   Province/State (Optional) •   Postal Code/Zip Code (Optional) •   Country (Mandatory)",
+										                  "line1": "Unite1",
+										                  "line2": "123 Abc Street",
+										                  "city": "Paris",
+										                  "prov": "France",
+										                  "postalCde": "E14 8K8",
+										                  "ctryCde": "FR"
+										               }
+										            },
+										            "pyeeFinInstInfo": {
+										               "bankName": "BNP Paris Bas",
+										               "bankCdeTyp": "2",
+										               "bankCde": "12346",
+										               "acctNum": "111-222222-334",
+										               "acctCcy": "EUR",
+										               "prodCatCde": "DDA",
+										               "bankAddr": {
+										                  "addrFrmtTyp": "Address line 1 (Mandatory) •   Address line 2 (Optional) •   Address line 3 (Optional) •   Country (Mandatory)  Format B •  Address line 1 (Mandatory) •   Address line 2 (Optional) •   City (Mandatory) •   Province/State (Optional) •   Postal Code/Zip Code (Optional) •   Country (Mandatory)",
+										                  "line1": "BNP Paris Bas",
+										                  "line2": "1 Bank Street",
+										                  "city": "Paris",
+										                  "prov": "France",
+										                  "postalCde": "SW1 1N1",
+										                  "ctryCde": "FR"
+										               }
+										            }
+										         }
+										      },
+										      "TxnDetails": {
+										         "debitAcctCcy": "EUR",
+										         "paymentCcy": "GBP",
+										         "txnAmt": {
+										            "amt": "100000",
+										            "ccy": "GBP"
+										         }
+										      },
+										      "TxnSchedDtl": {
+										         "txnSchedTyp": "PN",
+										         "txnSchedDate": ""
+										      },
+										      "ChrgType": {
+										         "chargeTye": "1",
+										         "chargeAcct": "1",
+										         "Fee": {
+										            "amt": "100",
+										            "ccy": "GBP"
+										         }
+										      } */
 							// Attributes
-							name : "unknown",
-							_setNameAttr : {
-								node : "nameNode",
+							Desc : "unknown",
+							_setDescAttr : {
+								node : "descNode",
+								type : "innerHTML"
+							},
+							
+							Date : "unknown",
+							_setDateAttr : {
+								node : "dateNode",
 								type : "innerHTML"
 							},
 
-							nameClass : "employeeName",
-							_setNameClassAttr : {
-								node : "nameNode",
+							DescClass : "employeeName",
+							_setDescClassAttr : {
+								node : "descNode",
 								type : "class"
-							},
+							}/*,
 
 							phone : "unknown",
 							_setPhoneAttr : {
 								node : "phoneNode",
 								type : "innerHTML"
-							}
+							}*/
 						});
 
 			});
@@ -137,30 +204,260 @@
 </script>
 <script>
 	//data
-	accounts = [ {
-		"label" : "",
-		"value" : "-1"
-	}, {
-		"label" : "Account 1 0000	0000	0000	00000	000000	923932939233243423432432423	11111",
-		"value" : "1"
-	}, {
-		"label" : "Account 2",
-		"value" : "2"
-	}, {
-		"label" : "Account 3",
-		"value" : "3"
-	} ]
-
-	transactions = [ {
-		"name" : "Brian Arnold",
-		"phone" : "(800) 555-1212"
-	}, {
-		"name" : "ASASASASS",
-		"phone" : "(800) CALL-CTU",
-		"nameClass" : "specialEmployeeName"
-	}
-	/* More authors here... */
+	accounts = [
+   {
+	      "desc": "Super Ease",
+	      "hasParent": false,
+	      "ccy": {
+	         "desc": "",
+	         "code": "HKD"
+	      },
+	      "accountNum": "001-029784-288",
+	      "type": "SEE",
+	      "id": "001029784288~~SS~~SEE~~HKD~~Super Ease~~DDA~~2C288HKD       HKDSSSEE",
+	      "balance": "-3,998.45",
+	      "drCr": true,
+	      "hasAcctDtl": true
+	   },
+	   {
+	      "desc": "HSBC Premier",
+	      "hasParent": false,
+	      "ccy": {
+	         "desc": "",
+	         "code": "HKD"
+	      },
+	      "accountNum": "001-072487-888",
+	      "type": "MST",
+	      "id": "001072487888~~AV~~MST~~HKD~~HSBC Premier~~DDA~~2B888HKD       HKDAVMST",
+	      "balance": "",
+	      "drCr": false,
+	      "hasAcctDtl": false
+	   },
+	   {
+	      "desc": "HKD Savings",
+	      "hasParent": true,
+	      "ccy": {
+	         "desc": "",
+	         "code": "HKD"
+	      },
+	      "accountNum": "001-072487-888",
+	      "type": "SAV",
+	      "id": "001072487888~~AV~~SAV~~HKD~~HSBC Premier HKD Savings~~DDA~~2A888HKD       HKDAVSAV",
+	      "balance": "68,776,514.04",
+	      "drCr": false,
+	      "hasAcctDtl": true
+	   },
+	   {
+	      "desc": "GBP Savings",
+	      "hasParent": true,
+	      "ccy": {
+	         "desc": "",
+	         "code": "GBP"
+	      },
+	      "accountNum": "001-072487-888",
+	      "type": "SAV",
+	      "id": "001072487888~~AV~~SAV~~GBP~~HSBC Premier GBP Savings~~DDA~~2F888GBP       GBPAVSAV",
+	      "balance": "Balance Not Available",
+	      "drCr": false,
+	      "hasAcctDtl": false
+	   },
+	   {
+	      "desc": "SGD Savings",
+	      "hasParent": true,
+	      "ccy": {
+	         "desc": "",
+	         "code": "SGD"
+	      },
+	      "accountNum": "001-072487-888",
+	      "type": "SAV",
+	      "id": "001072487888~~AV~~SAV~~SGD~~HSBC Premier SGD Savings~~DDA~~2F888SGD       SGDAVSAV",
+	      "balance": "Balance Not Available",
+	      "drCr": false,
+	      "hasAcctDtl": false
+	   },
+	   
+	   {
+	      "desc": "Investment Services",
+	      "hasParent": true,
+	      "ccy": {
+	         "desc": "",
+	         "code": "HKD"
+	      },
+	      "accountNum": "001-072487-888",
+	      "type": "INV",
+	      "id": "001072487888~~AV~~INV~~HKD~~HSBC Premier Investment Services~~DDA~~2R888HKD       HKDAVINV",
+	      "balance": "Balance Not Available",
+	      "drCr": false,
+	      "hasAcctDtl": false
+	   },
+	   {
+	      "desc": "USD Savings",
+	      "hasParent": true,
+	      "ccy": {
+	         "desc": "",
+	         "code": "USD"
+	      },
+	      "accountNum": "004-291209-888",
+	      "type": "SAV",
+	      "id": "004291209888~~AV~~SAV~~USD~~HSBC Premier USD Savings~~DDA~~2F888USD       USDAVSAV",
+	      "balance": "82,751.56",
+	      "drCr": false,
+	      "hasAcctDtl": true
+	   },
+	   {
+	      "desc": "Time Deposit",
+	      "hasParent": true,
+	      "ccy": {
+	         "desc": "",
+	         "code": "   "
+	      },
+	      "accountNum": "004-291209-888",
+	      "type": "TMS",
+	      "id": "0042912098880000~~AV~~TMS~~   ~~HSBC Premier Time Deposit~~DDA~~4T888             AVTMS",
+	      "balance": "Details",
+	      "drCr": false,
+	      "hasAcctDtl": true
+	   },
+	   {
+	      "desc": "Statement Gold",
+	      "hasParent": false,
+	      "ccy": {
+	         "desc": "",
+	         "code": "MACE"
+	      },
+	      "accountNum": "068-000934-261",
+	      "type": "GLD",
+	      "id": "068000934261~~SS~~GLD~~GLT~~Statement Gold~~DDA~~2W261GLT       GLTSSGLD",
+	      "balance": "0",
+	      "drCr": false,
+	      "hasAcctDtl": true
+	   }
 	]
+
+	transactions = [ 
+   {
+      "ID": "12345",
+      "Desc": "Buying 10 units of X",
+      "Date": "20140611",
+      "PyeeInfo": {
+         "pyeeDetlInfo": {
+            "pyeeDetlInfo": {
+               "pyeeTyp": "Personal",
+               "pyeeID": "1",
+               "pyeeName": "Mary Smith",
+               "pyeeCtry": "UK",
+               "pyeeAddr": {
+                  "addrFrmtTyp": "Address line 1 (Mandatory) •   Address line 2 (Optional) •   Address line 3 (Optional) •   Country (Mandatory)  Format B •  Address line 1 (Mandatory) •   Address line 2 (Optional) •   City (Mandatory) •   Province/State (Optional) •   Postal Code/Zip Code (Optional) •   Country (Mandatory)",
+                  "line1": "Unit 7",
+                  "line2": "123 Abc Street",
+                  "city": "London",
+                  "prov": "England",
+                  "postalCde": "E14 8K8",
+                  "ctryCde": "UK"
+               }
+            },
+            "pyeeFinInstInfo": {
+               "bankName": "Citibank",
+               "bankCdeTyp": "1",
+               "bankCde": "12345",
+               "acctNum": "111-222222-333",
+               "acctCcy": "GBP",
+               "prodCatCde": "DDA",
+               "bankAddr": {
+                  "addrFrmtTyp": "Address line 1 (Mandatory) •   Address line 2 (Optional) •   Address line 3 (Optional) •   Country (Mandatory)  Format B •  Address line 1 (Mandatory) •   Address line 2 (Optional) •   City (Mandatory) •   Province/State (Optional) •   Postal Code/Zip Code (Optional) •   Country (Mandatory)",
+                  "line1": "Citibank",
+                  "line2": "1 Bank Street",
+                  "city": "London",
+                  "prov": "Endland",
+                  "postalCde": "SW1 1N1",
+                  "ctryCde": "UK"
+               }
+            }
+         }
+      },
+      "TxnDetails": {
+         "debitAcctCcy": "GBP",
+         "paymentCcy": "GBP",
+         "txnAmt": {
+            "amt": "100",
+            "ccy": "GBP"
+         }
+      },
+      "TxnSchedDtl": {
+         "txnSchedTyp": "PN",
+         "txnSchedDate": ""
+      },
+      "ChrgType": {
+         "chargeTye": "1",
+         "chargeAcct": "1",
+         "Fee": {
+            "amt": "10",
+            "ccy": "GBP"
+         }
+      }
+   },
+   {
+      "ID": "12346",
+      "Desc": "Buying 10 units of X",
+      "Date": "20140611",
+      "PyeeInfo": {
+         "pyeeDetlInfo": {
+            "pyeeDetlInfo": {
+               "pyeeTyp": "Corporate",
+               "pyeeID": "2",
+               "pyeeName": "XYZ Shop",
+               "pyeeCtry": "France",
+               "pyeeAddr": {
+                  "addrFrmtTyp": "Address line 1 (Mandatory) •   Address line 2 (Optional) •   Address line 3 (Optional) •   Country (Mandatory)  Format B •  Address line 1 (Mandatory) •   Address line 2 (Optional) •   City (Mandatory) •   Province/State (Optional) •   Postal Code/Zip Code (Optional) •   Country (Mandatory)",
+                  "line1": "Unite1",
+                  "line2": "123 Abc Street",
+                  "city": "Paris",
+                  "prov": "France",
+                  "postalCde": "E14 8K8",
+                  "ctryCde": "FR"
+               }
+            },
+            "pyeeFinInstInfo": {
+               "bankName": "BNP Paris Bas",
+               "bankCdeTyp": "2",
+               "bankCde": "12346",
+               "acctNum": "111-222222-334",
+               "acctCcy": "EUR",
+               "prodCatCde": "DDA",
+               "bankAddr": {
+                  "addrFrmtTyp": "Address line 1 (Mandatory) •   Address line 2 (Optional) •   Address line 3 (Optional) •   Country (Mandatory)  Format B •  Address line 1 (Mandatory) •   Address line 2 (Optional) •   City (Mandatory) •   Province/State (Optional) •   Postal Code/Zip Code (Optional) •   Country (Mandatory)",
+                  "line1": "BNP Paris Bas",
+                  "line2": "1 Bank Street",
+                  "city": "Paris",
+                  "prov": "France",
+                  "postalCde": "SW1 1N1",
+                  "ctryCde": "FR"
+               }
+            }
+         }
+      },
+      "TxnDetails": {
+         "debitAcctCcy": "EUR",
+         "paymentCcy": "GBP",
+         "txnAmt": {
+            "amt": "100000",
+            "ccy": "GBP"
+         }
+      },
+      "TxnSchedDtl": {
+         "txnSchedTyp": "PN",
+         "txnSchedDate": ""
+      },
+      "ChrgType": {
+         "chargeTye": "1",
+         "chargeAcct": "1",
+         "Fee": {
+            "amt": "100",
+            "ccy": "GBP"
+         }
+      }
+   }
+	];
 
 	offers = [ {
 		"title" : "Special Offer No1",
@@ -212,14 +509,16 @@
 			var accountSelect = dijit.byId('accountSelect');
 			array.forEach(accounts, function(record) {
 				// Create our widget and place it
-				accountSelect.addOption(record);
+				accountSelect.addOption( { "label": record.desc + " " + record.accountNum, "value" : record.id});
 			});
 
 			accountSelect.onChange = function() {
-			dojo.empty("transactionsPanel");
-            var transactionPanel = dom.byId("transactionsPanel");
+				
+				dojo.empty("transactionsPanel");
+				
+            	var transactionPanel = dom.byId("transactionsPanel");
 			
- 			array.forEach(transactions, function(record) {
+ 				array.forEach(transactions, function(record) {
 				// Create our widget and place it
 				var widget = new TransactionRecord(record).placeAt(transactionPanel);
 				 widget.onmouseover = function() {
@@ -230,7 +529,7 @@
 									// Create our widget and place it
 									var widget = new OfferRecord(record).placeAt(offersContainer);
 								});
-};
+				};
 								
 			});
 			}
