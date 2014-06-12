@@ -22,6 +22,7 @@ public class MobileAccountSummaryServiceTest {
 		JsonObject response = service.getAccountSummary();
 
 		// then
+		System.out.println(response);
 		assertEquals(expectedJson, response);
 	}
 }

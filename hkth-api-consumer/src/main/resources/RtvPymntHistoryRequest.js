@@ -1,6 +1,3 @@
-/**
- *  Request (HTTP POST body):
- */
 {
 	"AcctInfo":{
 		"acctIndex":"~1098-001-123456-001", 
