@@ -1,6 +1,6 @@
 package hsbc.hkth.rest.api;
 
-import hsbc.hkth.bo.AccountBO;
+import hsbc.hkth.bo.PaymentsBO;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -10,15 +10,16 @@ import javax.ws.rs.core.Response;
 
 import com.google.gson.JsonArray;
 
-@Path("/a")
-public class AccountsREST {
+@Path("/p")
+public class PaymentsREST {
 
 	@GET
-	@Path("/accounts")
+	@Path("/payments")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response responseMsg() {
-		AccountBO accountBO = new AccountBO();
-		JsonArray accounts = accountBO.getAccounts();
-		return Response.status(200).entity(accounts.toString()).build();
+		PaymentsBO paymentsBO = new PaymentsBO();
+		JsonArray payments = paymentsBO.getPaymentsForAccount();
+		
+		return Response.status(200).entity(payments.toString()).build();
 	}
 }
