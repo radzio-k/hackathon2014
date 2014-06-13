@@ -270,9 +270,14 @@ function draw(city, country, payment, fee, currency)
 	if (payment <= 100)
 		var radius = 60;
 	else if (payment <= 1000)
-		var radius = 90;
-	else 
+		var radius = 80;
+	else if (payment <= 100000)
+		var radius = 100;
+	else if (payment <= 200000)
 		var radius = 120;
+
+	else 
+		var radius = 140;
 	
 	var location = city + ", " + country;
 	
@@ -441,8 +446,9 @@ function removeCharts () {
 						<div data-dojo-type="dijit/layout/ContentPane"
 							data-dojo-props="region:'right'" style="float:top; top:20px;">
 							<div data-dojo-type="dijit/layout/ContentPane" id="offersPanel" style="float:top; top:20px;">
-								<div id="transactionFee"></div>
-								<div id="transferRate"></div>
+								<span id="transactionFee"></span>&nbsp;<a href="#" onclick="alert('Your request has been processed')">click for details</a>
+								<br/><br/>
+								<span id="transferRate"></span>&nbsp;<a href="#" onclick="alert('Your request has been processed')">click for details</a>
 							</div>
 							<div id="offersPanelStandBy" data-dojo-type="dojox/widget/Standby" data-dojo-props="target:'offersPanel'"></div>
 							<br/>
